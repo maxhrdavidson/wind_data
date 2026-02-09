@@ -1,0 +1,14 @@
+# Environment / secrets
+.env
+*.env
+
+# Output data
+wind_data_results.csv
+.wind_data_progress.csv
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/

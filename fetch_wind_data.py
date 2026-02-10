@@ -6,10 +6,10 @@ Reads latitude/longitude coordinates from the SEIA Solar Data Excel file,
 queries the ASCE Hazard Tool API for wind data, and exports results to CSV.
 
 Usage:
-    export ASCE_API_TOKEN="your-api-key-here"
     python fetch_wind_data.py
 
-    # Or pass the token directly:
+    # Or override the token:
+    export ASCE_API_TOKEN="your-api-key-here"
     python fetch_wind_data.py --token YOUR_API_KEY
 
     # Limit to first N rows (useful for testing):
@@ -343,7 +343,7 @@ def main():
     )
     parser.add_argument(
         "--token",
-        default=os.environ.get("ASCE_API_TOKEN"),
+        default=os.environ.get("ASCE_API_TOKEN", "957f4961-5bb3-4c93-a8c2-acfdcdb0b9f3"),
         help="ASCE Hazard Tool API token (or set ASCE_API_TOKEN env var).",
     )
     parser.add_argument(

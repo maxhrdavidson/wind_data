@@ -1,0 +1,39 @@
+name: Heatmap Daily Podcast
+
+on:
+  schedule:
+    # Runs at 8:00 AM ET (13:00 UTC) every weekday
+    # Heatmap briefings arrive weekday mornings – adjust if needed
+    - cron: "0 13 * * 1-5"
+  workflow_dispatch:  # allows manual trigger from GitHub UI
+
+jobs:
+  generate-podcast:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r email_to_podcast/requirements.txt
+
+      - name: Generate and deliver podcast
+        env:
+          GMAIL_USER: ${{ secrets.GMAIL_USER }}
+          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          # Optional overrides:
+          # HEATMAP_SENDER: "briefing@heatmap.news"
+          # TTS_VOICE: "nova"
+          # TTS_MODEL: "tts-1-hd"
+        run: python email_to_podcast/main.py
